@@ -74,23 +74,23 @@ export default function LoginPage() {
             <h1 style={{ fontSize: "24px", fontWeight: "800", color: "white", letterSpacing: "1px" }}>MITALI ENTERPRISES <span style={{fontWeight: "400", opacity: 0.7}}>| SolarConnect</span></h1>
           </div>
           
-          <h2 style={{ fontSize: "48px", fontWeight: "700", color: "white", lineHeight: "1.1", marginBottom: "20px", maxWidth: "500px" }}>
+          <h2 className="login-h2" style={{ fontSize: "48px", fontWeight: "700", color: "white", lineHeight: "1.1", marginBottom: "20px", maxWidth: "500px" }}>
             Powering the Future of <span style={{ color: "var(--primary)" }}>Rooftop Solar</span>
           </h2>
-          <p style={{ fontSize: "18px", color: "#94a3b8", lineHeight: "1.6", maxWidth: "450px" }}>
+          <p style={{ fontSize: "16px", color: "#94a3b8", lineHeight: "1.6", maxWidth: "450px" }}>
             The ultimate enterprise platform for fitters and admins to seamlessly manage solar installations, track assets, and automatically generate government compliance documents.
           </p>
         </div>
 
-        <div style={{ position: "relative", zIndex: 10 }}>
-          <div style={{ display: "flex", gap: "20px" }}>
-            <div style={{ background: "rgba(255,255,255,0.05)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <div style={{ fontSize: "24px", fontWeight: "700", color: "white", marginBottom: "5px" }}>100%</div>
-              <div style={{ fontSize: "14px", color: "#94a3b8" }}>Paperless Workflow</div>
+        <div style={{ position: "relative", zIndex: 10, marginTop: "30px" }}>
+          <div className="stack-on-mobile" style={{ display: "flex", gap: "15px" }}>
+            <div style={{ background: "rgba(255,255,255,0.05)", padding: "15px 20px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)", flex: 1 }}>
+              <div style={{ fontSize: "20px", fontWeight: "700", color: "white", marginBottom: "4px" }}>100%</div>
+              <div style={{ fontSize: "13px", color: "#94a3b8" }}>Paperless Workflow</div>
             </div>
-            <div style={{ background: "rgba(255,255,255,0.05)", padding: "20px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <div style={{ fontSize: "24px", fontWeight: "700", color: "white", marginBottom: "5px" }}>Instant</div>
-              <div style={{ fontSize: "14px", color: "#94a3b8" }}>Docxtemplater Exports</div>
+            <div style={{ background: "rgba(255,255,255,0.05)", padding: "15px 20px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)", flex: 1 }}>
+              <div style={{ fontSize: "20px", fontWeight: "700", color: "white", marginBottom: "4px" }}>Instant</div>
+              <div style={{ fontSize: "13px", color: "#94a3b8" }}>Docxtemplater Exports</div>
             </div>
           </div>
         </div>
