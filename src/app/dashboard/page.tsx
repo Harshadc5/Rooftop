@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 import DashboardClient from "@/components/DashboardClient";
 
 export const dynamic = "force-dynamic";
-
-const prisma = new PrismaClient();
 
 export default async function DashboardPage() {
   // Fetch all consumers from database

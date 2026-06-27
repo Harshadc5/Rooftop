@@ -1,6 +1,6 @@
 "use client";
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -9,6 +9,12 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Prefetch pages in the background to make login instant
+  useEffect(() => {
+    if (username.toLowerCase() === "admin") router.prefetch("/dashboard");
+    if (username.toLowerCase() === "fitter") router.prefetch("/fitter");
+  }, [username, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
