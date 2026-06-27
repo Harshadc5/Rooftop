@@ -9,7 +9,7 @@ export default async function DashboardPage() {
   // Fetch all consumers from database
   const consumers = await prisma.consumer.findMany({
     orderBy: { createdAt: 'desc' },
-    include: { modules: true }
+    include: { modules: true, signatures: true }
   });
 
   return (
