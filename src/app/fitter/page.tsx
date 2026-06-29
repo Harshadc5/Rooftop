@@ -138,20 +138,8 @@ export default function FitterPortal() {
             setState(stateStr);
             setZipCode(zipStr);
 
-            // Filter out the city, district, state, zip, and country from the full display_name so they aren't duplicated in the Address box
-            let fullAddressSegments = (data.display_name || "").split(',').map(s => cleanEnglishText(s));
-            fullAddressSegments = fullAddressSegments.filter(segment => {
-              const segLower = segment.toLowerCase();
-              if (cityStr && segLower === cityStr.toLowerCase()) return false;
-              if (districtStr && segLower === districtStr.toLowerCase()) return false;
-              if (stateStr && segLower === stateStr.toLowerCase()) return false;
-              if (zipStr && segLower === zipStr.toLowerCase()) return false;
-              if (countryStr && segLower === countryStr.toLowerCase()) return false;
-              if (segLower === "india") return false;
-              return true;
-            });
-            
-            setAddress(fullAddressSegments.join(", ").replace(/^,\s*/, '').replace(/,\s*$/, '').trim());
+            // Since the separate UI boxes are now hidden, we place the full detected address into the Complete Address box so the user can see it!
+            setAddress(cleanEnglishText(data.display_name || ""));
           }
         } catch (err) {
           alert("Failed to get address from coordinates.");
@@ -276,10 +264,10 @@ export default function FitterPortal() {
           <div className="form-group" style={{ gridColumn: "1 / -1", marginTop: "-10px" }}>
             <label className="form-label">Complete Address</label><input type="text" name="address" className="input-field" value={address} onChange={e => setAddress(e.target.value)} placeholder="e.g. House/Plot No, Landmark, Area" required />
           </div>
-          <div className="form-group"><label className="form-label">City</label><input type="text" name="city" className="input-field" value={city} onChange={e => setCity(e.target.value)} placeholder="e.g. Malegaon" required /></div>
-          <div className="form-group"><label className="form-label">District</label><input type="text" name="district" className="input-field" value={district} onChange={e => setDistrict(e.target.value)} placeholder="e.g. Nashik" required /></div>
-          <div className="form-group"><label className="form-label">State</label><input type="text" name="state" className="input-field" value={state} onChange={e => setState(e.target.value)} placeholder="e.g. Maharashtra" /></div>
-          <div className="form-group"><label className="form-label">Postal Zip Code</label><input type="text" name="zipCode" className="input-field" value={zipCode} onChange={e => setZipCode(e.target.value)} placeholder="e.g. 423203" /></div>
+          <input type="hidden" name="city" value={city} />
+          <input type="hidden" name="district" value={district} />
+          <input type="hidden" name="state" value={state} />
+          <input type="hidden" name="zipCode" value={zipCode} />
 
           <div className="form-group"><label className="form-label">Aadhar Number (12 digits)</label><input type="text" name="aadharNumber" className="input-field" pattern="\d{12}" maxLength={12} title="Must be exactly 12 digits" placeholder="e.g. 432084801502" required /></div>
           <div className="form-group">

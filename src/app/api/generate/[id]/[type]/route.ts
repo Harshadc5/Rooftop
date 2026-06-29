@@ -117,7 +117,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       consumer_number: consumer.consumerNumber,
       mobile_number: consumer.mobileNumber,
       email: consumer.email || "",
-      address: `${consumer.address || ""} , District: ${consumer.district || ""} , State: ${(consumer as any).state || ""} , PIN Code: ${(consumer as any).zipCode || ""}`,
+      address: consumer.address || "",
       city: consumer.city,
       district: consumer.district,
       state: (consumer as any).state || "",
