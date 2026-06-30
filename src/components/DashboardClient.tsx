@@ -132,7 +132,7 @@ export default function DashboardClient({ initialConsumers }: { initialConsumers
 
       if (field === "district" && c.address) {
         // Extract district from Complete Address (e.g., "..., Pune, Maharashtra 411014, India")
-        const parts = c.address.split(',').map(p => p.trim()).filter(Boolean);
+        const parts = c.address.split(',').map((p: string) => p.trim()).filter(Boolean);
         let len = parts.length;
         if (len > 0 && parts[len - 1].toLowerCase() === 'india') {
           parts.pop();
