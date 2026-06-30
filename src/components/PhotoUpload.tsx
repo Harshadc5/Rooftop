@@ -20,7 +20,8 @@ export default function PhotoUpload({
   quality = 0.7,
   previewHeight = 160,
 }: PhotoUploadProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -54,11 +55,20 @@ export default function PhotoUpload({
 
   return (
     <div style={{ width: "100%" }}>
-      {/* Hidden file input — no capture="" so the OS shows Camera / Gallery / Files */}
+      {/* Hidden input for Gallery */}
       <input
-        ref={inputRef}
+        ref={galleryInputRef}
         type="file"
         accept="image/*"
+        onChange={handleFile}
+        style={{ display: "none" }}
+      />
+      {/* Hidden input for Camera */}
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
         onChange={handleFile}
         style={{ display: "none" }}
       />
@@ -81,7 +91,11 @@ export default function PhotoUpload({
           {/* ✕ button — top-left corner */}
           <button
             type="button"
-            onClick={() => { onClear(); if (inputRef.current) inputRef.current.value = ""; }}
+            onClick={() => { 
+              onClear(); 
+              if (galleryInputRef.current) galleryInputRef.current.value = ""; 
+              if (cameraInputRef.current) cameraInputRef.current.value = ""; 
+            }}
             title="Remove photo"
             style={{
               position: "absolute",
@@ -109,7 +123,7 @@ export default function PhotoUpload({
           {/* Small "Retake" button at the bottom */}
           <button
             type="button"
-            onClick={() => inputRef.current?.click()}
+            onClick={() => galleryInputRef.current?.click()}
             style={{
               position: "absolute",
               bottom: "8px",
@@ -128,43 +142,70 @@ export default function PhotoUpload({
           </button>
         </div>
       ) : (
-        /* ── UPLOAD button ── */
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          style={{
-            width: "100%",
-            padding: "14px",
-            background: "white",
-            border: "2px dashed #cbd5e1",
-            borderRadius: "10px",
-            color: "#475569",
-            fontSize: "14px",
-            fontWeight: "600",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: "8px",
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={e => {
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "#f59e0b";
-            (e.currentTarget as HTMLButtonElement).style.color = "#b45309";
-          }}
-          onMouseLeave={e => {
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "#cbd5e1";
-            (e.currentTarget as HTMLButtonElement).style.color = "#475569";
-          }}
-        >
-          {/* Upload icon */}
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="17 8 12 3 7 8" />
-            <line x1="12" y1="3" x2="12" y2="15" />
-          </svg>
-          Upload Photo
-        </button>
+        /* ── UPLOAD buttons (Camera / Gallery) ── */
+        <div style={{ display: "flex", gap: "8px", width: "100%" }}>
+          <button
+            type="button"
+            onClick={() => cameraInputRef.current?.click()}
+            style={{
+              flex: 1,
+              padding: "12px",
+              background: "white",
+              border: "2px dashed #cbd5e1",
+              borderRadius: "10px",
+              color: "#475569",
+              fontSize: "14px",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#10b981";
+              (e.currentTarget as HTMLButtonElement).style.color = "#047857";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#cbd5e1";
+              (e.currentTarget as HTMLButtonElement).style.color = "#475569";
+            }}
+          >
+            📸 Use Camera
+          </button>
+
+          <button
+            type="button"
+            onClick={() => galleryInputRef.current?.click()}
+            style={{
+              flex: 1,
+              padding: "12px",
+              background: "white",
+              border: "2px dashed #cbd5e1",
+              borderRadius: "10px",
+              color: "#475569",
+              fontSize: "14px",
+              fontWeight: "600",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              transition: "all 0.2s ease",
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#3b82f6";
+              (e.currentTarget as HTMLButtonElement).style.color = "#1d4ed8";
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLButtonElement).style.borderColor = "#cbd5e1";
+              (e.currentTarget as HTMLButtonElement).style.color = "#475569";
+            }}
+          >
+            🖼️ Gallery
+          </button>
+        </div>
       )}
     </div>
   );
