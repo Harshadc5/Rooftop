@@ -6,6 +6,13 @@ const prisma = new PrismaClient();
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
+    const body = await req.json();
+
+    // Verify Master Deletion Password
+    const masterPassword = process.env.MASTER_DELETE_PASSWORD;
+    if (!masterPassword || body.password !== masterPassword) {
+      return NextResponse.json({ error: "Unauthorized: Incorrect deletion password." }, { status: 401 });
+    }
     
     await prisma.consumer.delete({
       where: { id }

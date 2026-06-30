@@ -12,6 +12,10 @@ export default function DashboardClient({ initialConsumers }: { initialConsumers
   // Bulk Selection State
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
+  // Deletion Auth State
+  const [deleteCandidate, setDeleteCandidate] = useState<{ id: string, name: string } | null>(null);
+  const [deletePassword, setDeletePassword] = useState("");
+
   const filteredConsumers = initialConsumers.filter(c => 
     c.consumerName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.mobileNumber?.includes(searchTerm) ||
@@ -140,18 +144,29 @@ export default function DashboardClient({ initialConsumers }: { initialConsumers
   const topInverters = getTopItems("inverterMake", 4);
   const topPanels = getTopItems("moduleMake", 4);
 
-  const handleDelete = async (id: string, name: string) => {
-    if (window.confirm(`Are you sure you want to permanently delete the installation record for ${name}?`)) {
-      try {
-        const res = await fetch(`/api/installations/${id}`, { method: 'DELETE' });
-        if (res.ok) {
-          window.location.reload();
-        } else {
-          alert("Failed to delete record.");
-        }
-      } catch (e) {
-        alert("Error deleting record.");
+  const handleDelete = (id: string, name: string) => {
+    setDeleteCandidate({ id, name });
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteCandidate) return;
+    try {
+      const res = await fetch(`/api/installations/${deleteCandidate.id}`, { 
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: deletePassword })
+      });
+      if (res.ok) {
+        window.location.reload();
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to delete record.");
       }
+    } catch (e) {
+      alert("Error deleting record.");
+    } finally {
+      setDeleteCandidate(null);
+      setDeletePassword("");
     }
   };
 
@@ -497,6 +512,44 @@ export default function DashboardClient({ initialConsumers }: { initialConsumers
               </div>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* DELETE AUTHENTICATION MODAL */}
+      {deleteCandidate && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(15,23,42,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "20px" }}>
+          <div className="glass-panel animate-fade-in-up" style={{ padding: "30px", maxWidth: "400px", width: "100%", background: "#1e293b", border: "1px solid #334155" }}>
+            <h3 style={{ fontSize: "20px", color: "#ef4444", marginBottom: "15px", display: "flex", alignItems: "center", gap: "10px" }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              Authentication Required
+            </h3>
+            <p style={{ color: "#cbd5e1", marginBottom: "20px", fontSize: "14px", lineHeight: "1.5" }}>
+              You are attempting to permanently delete the record for <strong>{deleteCandidate.name}</strong>. Please enter the Master Deletion Password to continue.
+            </p>
+            <input 
+              type="password" 
+              value={deletePassword}
+              onChange={(e) => setDeletePassword(e.target.value)}
+              placeholder="Master Password"
+              style={{ width: "100%", padding: "12px", borderRadius: "6px", border: "1px solid #475569", background: "#0f172a", color: "white", marginBottom: "20px" }}
+            />
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "15px" }}>
+              <button 
+                onClick={() => { setDeleteCandidate(null); setDeletePassword(""); }} 
+                className="btn-secondary"
+                style={{ padding: "10px 20px", borderRadius: "6px" }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={confirmDelete}
+                className="btn-primary"
+                style={{ background: "#ef4444", border: "none", padding: "10px 20px", borderRadius: "6px", color: "white", fontWeight: "600", cursor: "pointer" }}
+              >
+                Delete Record
+              </button>
+            </div>
           </div>
         </div>
       )}
