@@ -6,7 +6,13 @@ const prisma = new PrismaClient();
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    const body = await req.json();
+    
+    let body: any = {};
+    try {
+      body = await req.json();
+    } catch (e) {
+      // Body is empty or not JSON, which is fine, we will just reject it below
+    }
 
     // Verify Master Deletion Password
     const masterPassword = process.env.MASTER_DELETE_PASSWORD;
